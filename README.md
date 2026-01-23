@@ -41,8 +41,21 @@ The manager automatically detects the resource type and appends the correct subf
 
 ---
 
-## 🛠 Tech Stack
-* **Language:** Python 3
-* **UI Framework:** PySide6 (Qt)
-* **API:** CurseForge
-* **Platform:** Any, focus on Linux
+## 🛠 Installation & Execution
+
+For this step you must have python3 installed, specifically 3.12.3
+
+Follow these steps in your terminal to get the manager running:
+
+1. **Create a virtual environment:**
+   ```bash
+   python3 -m venv venv
+2. **Activate the environment:**
+   ```bash
+     venv/bin/activate
+3. **Install dependencies:**
+   ```bash
+    pip install -r requirements.txt
+4. **Run the program:**
+   ```bash
+    python3 main.py
