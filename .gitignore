@@ -1,3 +1,48 @@
-/target
-/.idea\
-Cargo.lock
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- Virtual environments ---
+env/
+venv/
+.venv/
+.env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- Packaging / build ---
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- Secrets / local config / runtime state ---
+.env
+.env.*
+settings.json
+**/settings.json
+*.xauth
+.state/
+
+# --- Logs (optional but recommended) ---
+logs/
+**/logs/
+*.log
