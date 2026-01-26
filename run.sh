@@ -45,10 +45,13 @@ sudo mkdir -p "$CONFIG_DIR" "$LOG_DIR"
 sudo touch "$SETTINGS_FILE_HOST"
 sudo chown -R "${RUN_UID}:${RUN_GID}" "$CONFIG_DIR" "$LOG_DIR"
 sudo chmod 775 "$CONFIG_DIR" "$LOG_DIR"
-sudo chmod 664 "$SETTINGS_FILE_HOST"
+sudo chmod 660 "$SETTINGS_FILE_HOST"
 
 # Build an Xauthority file readable by the container user
-sudo rm -rf "$XAUTH_FILE"
+if sudo test -d "$XAUTH_FILE" 2>/dev/null; then
+  sudo rm -rf "$XAUTH_FILE"
+fi
+sudo rm -f "$XAUTH_FILE"
 sudo touch "$XAUTH_FILE"
 sudo chmod 600 "$XAUTH_FILE"
 

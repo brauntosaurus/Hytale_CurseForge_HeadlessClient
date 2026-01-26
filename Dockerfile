@@ -1,6 +1,8 @@
 FROM python:3.12-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_PROGRESS_BAR=off
+
 WORKDIR /app
 
 # Qt/PySide runtime deps (inside container)
