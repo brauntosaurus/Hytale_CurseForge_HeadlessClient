@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Black">
-    <option name="sdkName" value="Python 3.12 (PythonProject)" />
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id>Cargo.tomlRust</id>
+          </State>
+          <State>
+            <id>LintsRust</id>
+          </State>
+          <State>
+            <id>Naming conventionsLintsRust</id>
+          </State>
+          <State>
+            <id>Rust</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>User defined</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (PythonProject)" project-jdk-type="Python SDK" />
+  <component name="RsExternalLinterProjectSettings">
+    <option name="channel" value="stable" />
+  </component>
 </project>

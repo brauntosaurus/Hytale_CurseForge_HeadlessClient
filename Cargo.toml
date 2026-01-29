@@ -1,0 +1,19 @@
+[package]
+name = "HytaleModManager"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dioxus = { version = "0.7.3", features = ["desktop"] }
+
+rfd = "0.17.2"
+directories = "6.0.0"
+dirs = "6.0.0"
+
+tokio = { version = "1.0", features = ["full"] }
+reqwest = { version = "0.13.1", features = ["json", "query"] }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+log = "0.4"
