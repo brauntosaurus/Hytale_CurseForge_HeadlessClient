@@ -1,0 +1,57 @@
+{
+  "app-id": "com.hytale.modmanager",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "46",
+  "sdk": "org.gnome.Sdk",
+  "command": "HytaleModManager",
+  "finish-args": [
+    "--share=network",
+    "--socket=x11",
+    "--socket=wayland",
+    "--device=dri",
+    "--filesystem=home"
+  ],
+  "modules": [
+    {
+      "name": "libxdo",
+      "buildsystem": "simple",
+      "build-commands": [
+        "make INSTALL_MAN=0 PREFIX=/app",
+        "make install INSTALL_MAN=0 PREFIX=/app"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/jordansissel/xdotool.git",
+          "tag": "v3.20211022.1"
+        }
+      ]
+    },
+    {
+      "name": "hytale-mod-manager",
+      "buildsystem": "simple",
+      "build-options": {
+        "build-args": ["--share=network"],
+        "env": {
+          "CARGO_HOME": "/run/build/hytale-mod-manager/cargo",
+          "LIBRARY_PATH": "/app/lib",
+          "LD_LIBRARY_PATH": "/app/lib",
+          "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig"
+        }
+      },
+      "build-commands": [
+        "curl https://sh.rustup.rs -sSf | sh -s -- -y",
+        ". $CARGO_HOME/env && rustup default stable && cargo build --release",
+        "install -Dm755 target/release/HytaleModManager /app/bin/HytaleModManager",
+        "install -Dm644 com.hytale.modmanager.desktop /app/share/applications/com.hytale.modmanager.desktop",
+        "install -Dm644 icon.png /app/share/icons/hicolor/512x512/apps/com.hytale.modmanager.png"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "../"
+        }
+      ]
+    }
+  ]
+}
