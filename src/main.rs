@@ -38,7 +38,7 @@ fn main() {
     let config = Config::new()
         .with_window(window)
         .with_menu(None)
-        .with_disable_context_menu(true);
+        .with_disable_context_menu(false);
     
     LaunchBuilder::desktop()
         .with_cfg(config)
