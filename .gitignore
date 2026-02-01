@@ -42,6 +42,9 @@ settings.json
 *.xauth
 .state/
 
+# --- Docker ---
+.dockerignore
+
 # --- Logs (optional but recommended) ---
 logs/
 **/logs/
