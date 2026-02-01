@@ -2,6 +2,7 @@
 set -euo pipefail
 
 IMAGE="${IMAGE:-hytale-curseforge-headlessclient}"
+CONTAINER_NAME="${CONTAINER_NAME:-hytale-curseforge-headlessclient}"
 
 # Host paths (underscores)
 BASE_DIR="${BASE_DIR:-/opt/hytale_curseforge_headlessclient}"
@@ -74,7 +75,13 @@ echo "Run as:        uid=$RUN_UID gid=$RUN_GID"
 echo "Settings:      $SETTINGS_FILE_HOST -> $SETTINGS_FILE_CONT"
 echo "Logs:          $LOG_DIR -> /data/logs"
 
+# Ensure only one container instance is running
+if docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+  docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
+fi
+
 exec docker run --rm -it \
+  --name "$CONTAINER_NAME" \
   --network=host \
   --user "${RUN_UID}:${RUN_GID}" \
   -e DISPLAY="$DISPLAY" \
