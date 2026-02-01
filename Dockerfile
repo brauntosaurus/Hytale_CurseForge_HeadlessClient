@@ -1,29 +1,50 @@
-FROM python:3.12-slim
+# syntax=docker/dockerfile:1
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_PROGRESS_BAR=off
-
+# --- build stage ---
+FROM rust:1-bookworm AS build
 WORKDIR /app
 
-# Qt/PySide runtime deps (inside container)
+# Build deps for Dioxus Desktop (wry/webkit/gtk) + TLS
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libglib2.0-0 libdbus-1-3 \
-    libegl1 libgl1 \
-    libfontconfig1 libfreetype6 \
-    libxkbcommon0 libxkbcommon-x11-0 \
-    libxcb1 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
-    libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-shm0 libxcb-sync1 \
-    libxcb-xfixes0 libxcb-xinerama0 \
-    libx11-6 libxext6 libxrender1 libxi6 libxrandr2 libxtst6 \
+    build-essential \
+    pkg-config \
+    clang \
+    cmake \
+    libssl-dev \
+    libgtk-3-dev \
+    libwebkit2gtk-4.1-dev \
   && rm -rf /var/lib/apt/lists/*
 
-# Install Python deps (fail build if PySide6 missing)
-COPY requirements.txt /app/requirements.txt
-RUN python3 -m pip install --upgrade pip \
- && python3 -m pip install --no-cache-dir -r /app/requirements.txt \
- && python3 -m pip show PySide6
+# (Optional) Cargo dep-cache layer: build a dummy main first
+COPY Cargo.toml Cargo.lock build.rs ./
+RUN mkdir -p src && printf '%s\n' 'fn main(){}' > src/main.rs
+RUN cargo build --release || true
+RUN rm -rf src
 
-# Copy app source
-COPY . /app
+# Now copy the full source and build for real
+COPY . .
+RUN cargo build --release
 
-CMD ["python3", "main.py"]
+# --- runtime stage ---
+FROM debian:bookworm-slim
+WORKDIR /app
+
+# Runtime libs for Dioxus Desktop (WebKitGTK/GTK) + X11 + basic GL + TLS
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libssl3 \
+    libglib2.0-0 \
+    libcairo2 \
+    libpango-1.0-0 libpangocairo-1.0-0 \
+    libgdk-pixbuf-2.0-0 \
+    libatk1.0-0 libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libwebkit2gtk-4.1-0 \
+    libx11-6 libx11-xcb1 libxcb1 libxkbcommon0 \
+    libdrm2 libgbm1 \
+  && rm -rf /var/lib/apt/lists/*
+
+# Copy the compiled binary (crate name from Cargo.toml)
+COPY --from=build /app/target/release/HytaleModManager /usr/local/bin/HytaleModManager
+
+CMD ["HytaleModManager"]
